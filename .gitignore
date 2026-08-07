@@ -1,0 +1,33 @@
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Editor e IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Uploads e dados sensíveis
+uploads/
+config_local.php
+
+# Banco de dados
+*.sqlite
+*.db
+
+# Node modules (se usar)
+node_modules/
+package-lock.json
+
+# Composer
+vendor/
+composer.lock
+
+# Logs
+*.log
+
+# Variáveis de ambiente
+.env
+.env.local
