@@ -95,6 +95,7 @@ $moradores = $pdo->query("SELECT * FROM moradores ORDER BY bloco_quadra, numero_
             <li><a href="historico.php"><i class="bi bi-clock-history"></i> Histórico de Retiradas</a></li>
             <?php if ($usuario['perfil'] === 'administrador'): ?>
                 <li><a href="cadastrar_usuario.php"><i class="bi bi-person-plus-fill"></i> Cadastro de Usuários</a></li>
+                <li><a href="listar_usuarios.php"><i class="bi bi-list-ul"></i> Listar Usuários</a></li>
             <?php endif; ?>
         </ul>
         <div class="text-muted small text-center pt-3 border-top border-secondary opacity-75">Sistema v1.0</div>

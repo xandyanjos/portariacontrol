@@ -69,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <li><a href="moradores.php"><i class="bi bi-people-fill"></i> Gestão de Moradores</a></li>
             <li><a href="historico.php"><i class="bi bi-clock-history"></i> Histórico de Retiradas</a></li>
             <li><a href="cadastrar_usuario.php" class="active"><i class="bi bi-person-plus-fill"></i> Cadastro de Usuários</a></li>
+            <li><a href="listar_usuarios.php"><i class="bi bi-list-ul"></i> Listar Usuários</a></li>
         </ul>
         <div class="text-muted small text-center pt-3 border-top border-secondary opacity-75">Sistema v1.0</div>
     </nav>
