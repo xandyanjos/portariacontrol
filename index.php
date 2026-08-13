@@ -10,7 +10,7 @@ $busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
 
 if ($busca !== '') {
     $stmt = $pdo->prepare("
-        SELECT e.*, m.nome_completo, m.bloco_quadra, m.numero_unidade 
+        SELECT e.*, m.nome_completo, m.numero_unidade 
         FROM encomendas e 
         JOIN moradores m ON e.morador_id = m.id 
         WHERE e.codigo_etiqueta LIKE ? OR m.numero_unidade LIKE ? OR m.nome_completo LIKE ?
@@ -19,7 +19,7 @@ if ($busca !== '') {
     $stmt->execute(["%$busca%", "%$busca%", "%$busca%"]);
 } else {
     $stmt = $pdo->query("
-        SELECT e.*, m.nome_completo, m.bloco_quadra, m.numero_unidade 
+        SELECT e.*, m.nome_completo, m.numero_unidade 
         FROM encomendas e 
         JOIN moradores m ON e.morador_id = m.id 
         WHERE e.status = 'Pendente'
@@ -210,7 +210,7 @@ $alertas = gerar_alertas_abandono($pdo);
                                 <?php foreach ($encomendas as $enc): ?>
                                     <tr>
                                         <td><span class="code-tag"><?= htmlspecialchars($enc['codigo_etiqueta']) ?></span></td>
-                                        <td><span class="fw-bold text-dark"><?= htmlspecialchars($enc['bloco_quadra'] . ' - ' . $enc['numero_unidade']) ?></span></td>
+                                        <td><span class="fw-bold text-dark"><?= htmlspecialchars($enc['numero_unidade']) ?></span></td>
                                         <td><?= htmlspecialchars($enc['nome_completo']) ?></td>
                                         <td>
                                             <span class="badge bg-light text-dark border px-2 py-1">
@@ -255,7 +255,7 @@ $alertas = gerar_alertas_abandono($pdo);
     </main>
 
     <footer class="text-center py-4 mt-4 text-muted small">
-        © 2026 Desenvolvido por Alexandre Anjosa. Todos os direitos reservados.
+        © 2026 Desenvolvido por Alexandre Anjos. Todos os direitos reservados.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

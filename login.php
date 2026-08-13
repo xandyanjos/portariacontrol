@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <footer class="text-center py-4 mt-4 text-muted small">
-        © 2026 Desenvolvido por Alexandre Anjosa. Todos os direitos reservados.
+        © 2026 Desenvolvido por Alexandre Anjos. Todos os direitos reservados.
     </footer>
 </body>
 </html>

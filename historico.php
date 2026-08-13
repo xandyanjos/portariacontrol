@@ -8,24 +8,24 @@ $busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
 
 if ($busca !== '') {
     $stmt = $pdo->prepare("
-        SELECT e.*, m.nome_completo as morador_nome, m.bloco_quadra, m.numero_unidade, l.data_retirada, l.entregue_por_funcionario, l.retirado_por_morador, l.nome_retirante_avulso, pa.nome_completo as autorizado_nome, pa.parentesco_funcao
+        SELECT e.*, m.nome_completo as morador_nome, m.numero_unidade, l.data_retirada, l.entregue_por_funcionario, l.retirado_por_morador, l.nome_retirante_avulso, pa.nome_completo as autorizado_nome, pa.parentesco_funcao
         FROM encomendas e
         JOIN moradores m ON e.morador_id = m.id
         JOIN logs_retirada l ON e.id = l.encomenda_id
         LEFT JOIN pessoas_autorizadas pa ON l.retirado_por_id = pa.id
         WHERE e.status = 'Retirado' AND (e.codigo_etiqueta LIKE ? OR m.numero_unidade LIKE ? OR m.nome_completo LIKE ?)
-        ORDER BY l.data_retirada DESC
+        ORDER BY l.data_retirada DESC 
     ");
     $stmt->execute(["%$busca%", "%$busca%", "%$busca%"]);
 } else {
     $stmt = $pdo->query("
-        SELECT e.*, m.nome_completo as morador_nome, m.bloco_quadra, m.numero_unidade, l.data_retirada, l.entregue_por_funcionario, l.retirado_por_morador, l.nome_retirante_avulso, pa.nome_completo as autorizado_nome, pa.parentesco_funcao
+        SELECT e.*, m.nome_completo as morador_nome, m.numero_unidade, l.data_retirada, l.entregue_por_funcionario, l.retirado_por_morador, l.nome_retirante_avulso, pa.nome_completo as autorizado_nome, pa.parentesco_funcao
         FROM encomendas e
         JOIN moradores m ON e.morador_id = m.id
         JOIN logs_retirada l ON e.id = l.encomenda_id
         LEFT JOIN pessoas_autorizadas pa ON l.retirado_por_id = pa.id
         WHERE e.status = 'Retirado'
-        ORDER BY l.data_retirada DESC
+        ORDER BY l.data_retirada DESC 
     ");
 }
 $historico = $stmt->fetchAll();
@@ -117,7 +117,7 @@ $historico = $stmt->fetchAll();
                                     <tr>
                                         <td><span class="code-tag"><?= htmlspecialchars($h['codigo_etiqueta']) ?></span></td>
                                         <td>
-                                            <div class="fw-bold text-dark"><?= htmlspecialchars($h['bloco_quadra'] . ' - ' . $h['numero_unidade']) ?></div>
+                                            <div class="fw-bold text-dark"><?= htmlspecialchars($h['numero_unidade']) ?></div>
                                             <div class="text-muted small"><?= htmlspecialchars($h['morador_nome']) ?></div>
                                         </td>
                                         <td>
@@ -154,7 +154,7 @@ $historico = $stmt->fetchAll();
     </main>
 
     <footer class="text-center py-4 mt-4 text-muted small">
-        © 2026 Desenvolvido por Alexandre Anjosa. Todos os direitos reservados.
+        © 2026 Desenvolvido por Alexandre Anjos. Todos os direitos reservados.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Buscar moradores para o select
-$moradores = $pdo->query("SELECT id, bloco_quadra, numero_unidade, nome_completo FROM moradores ORDER BY bloco_quadra, numero_unidade")->fetchAll();
+$moradores = $pdo->query("SELECT id, numero_unidade, nome_completo FROM moradores ORDER BY numero_unidade")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -92,7 +92,7 @@ $moradores = $pdo->query("SELECT id, bloco_quadra, numero_unidade, nome_completo
                         <option value="">Selecione a unidade ou morador...</option>
                         <?php foreach ($moradores as $m): ?>
                             <option value="<?= $m['id'] ?>">
-                                <?= "Unidade: " . $m['numero_unidade'] . (!empty($m['bloco_quadra']) ? " (Bloco/Qd: " . $m['bloco_quadra'] . ")" : "") . " — " . $m['nome_completo'] ?>
+                                <?= "Unidade: " . $m['numero_unidade'] . " — " . $m['nome_completo'] ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -122,7 +122,7 @@ $moradores = $pdo->query("SELECT id, bloco_quadra, numero_unidade, nome_completo
     </div>
 
     <footer class="text-center py-4 mt-4 text-muted small">
-        © 2026 Desenvolvido por Alexandre Anjosa. Todos os direitos reservados.
+        © 2026 Desenvolvido por Alexandre Anjos. Todos os direitos reservados.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -9,7 +9,7 @@ $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 // Buscar dados da encomenda e do morador
 $stmt = $pdo->prepare("
-    SELECT e.*, m.id as morador_id, m.nome_completo, m.bloco_quadra, m.numero_unidade 
+    SELECT e.*, m.id as morador_id, m.nome_completo, m.numero_unidade 
     FROM encomendas e 
     JOIN moradores m ON e.morador_id = m.id 
     WHERE e.id = ? AND e.status = 'Pendente'
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="col-sm-6">
                         <span class="text-muted small d-block">Unidade</span>
-                        <strong class="text-dark"><?= htmlspecialchars($encomenda['bloco_quadra'] . ' - ' . $encomenda['numero_unidade']) ?></strong>
+                        <strong class="text-dark"><?= htmlspecialchars($encomenda['numero_unidade']) ?></strong>
                     </div>
                     <div class="col-sm-6 mt-2">
                         <span class="text-muted small d-block">Morador Titular</span>
