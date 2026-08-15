@@ -15,6 +15,9 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    // Loga o erro detalhado para os desenvolvedores
+    error_log("Erro de conexão com o banco de dados: " . $e->getMessage());
+    // Exibe uma mensagem amigável para o usuário
+    die("Ocorreu um erro crítico ao conectar com o banco de dados. Por favor, contate o administrador.");
 }
 ?>

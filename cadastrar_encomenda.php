@@ -2,7 +2,57 @@
 require_once 'conexao.php';
 require_once 'auth.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+if (file_exists('vendor/autoload.php')) {
+    require 'vendor/autoload.php';
+    require_once __DIR__ . '/email_config.php';
+    require_once __DIR__ . '/whatsapp_config.php';
+} else {
+    error_log("CRITICAL ERROR: vendor/autoload.php nao encontrado. Execute 'composer install'.");
+    die("Ocorreu um erro critico no sistema. Por favor, contate o administrador.");
+}
+
 $usuario = exigir_login(['administrador', 'portaria']);
+
+function smtp_enviar_com_fallback_cad($to, $toName, $subject, $body, $altBody) {
+    $tentativas = [
+        ['host' => SMTP_HOST, 'port' => SMTP_PORT, 'secure' => SMTP_SECURE, 'label' => 'STARTTLS :' . SMTP_PORT],
+    ];
+    if (EMAIL_SMTP_FALLBACK_TRY_SSL465 && SMTP_PORT !== 465) {
+        $tentativas[] = ['host' => 'smtp.gmail.com', 'port' => 465, 'secure' => SMTP_SECURE_SSL, 'label' => 'SSL :465'];
+    }
+    foreach ($tentativas as $cfg) {
+        try {
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host       = $cfg['host'];
+            $mail->SMTPAuth   = true;
+            $mail->Username   = SMTP_USERNAME;
+            $mail->Password   = SMTP_PASSWORD;
+            $mail->SMTPSecure = $cfg['secure'];
+            $mail->Port       = $cfg['port'];
+            $mail->CharSet    = 'UTF-8';
+            $mail->Timeout    = 12;
+            $mail->setFrom(EMAIL_FROM, EMAIL_FROM_NAME);
+            $mail->addAddress($to, $toName);
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = $body;
+            $mail->AltBody = $altBody;
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            error_log("SMTP [{$cfg['label']}] falhou: " . $mail->ErrorInfo);
+        }
+    }
+    if (EMAIL_USE_MOCK_FALLBACK) {
+        email_save_mock($to, $toName, $subject, $body, $altBody);
+        return true;
+    }
+    return false;
+}
 
 $mensagem = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -12,17 +62,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $porteiro = trim($_POST['recebido_por_funcionario']);
     $obs = trim($_POST['observacoes']);
 
+    $pdo->beginTransaction();
+
     try {
         $stmt = $pdo->prepare("INSERT INTO encomendas (codigo_etiqueta, morador_id, transportadora_marketplace, recebido_por_funcionario, observacoes) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$codigo, $morador_id, $origem, $porteiro, $obs]);
-        header("Location: index.php?sucesso=1");
+        $encomenda_id = $pdo->lastInsertId();
+
+        $stmtMorador = $pdo->prepare("SELECT nome_completo, email, telefone, numero_unidade FROM moradores WHERE id = ?");
+        $stmtMorador->execute([$morador_id]);
+        $morador = $stmtMorador->fetch();
+
+        $email_ok = false;
+        $wa_ok = false;
+
+        if ($morador && !empty($morador['email'])) {
+            $subject = 'Nova encomenda para voce!';
+            $body    = "Ola, " . htmlspecialchars($morador['nome_completo']) . "!<br><br>Uma nova encomenda foi recebida em seu nome e ja esta disponivel para retirada na portaria.<br><br><strong>Codigo da Etiqueta:</strong> " . htmlspecialchars($codigo) . "<br><strong>Recebida por:</strong> " . htmlspecialchars($porteiro) . "<br><br>Atenciosamente,<br>Equipe da Portaria";
+            $altBody = "Ola, " . htmlspecialchars($morador['nome_completo']) . "! Uma nova encomenda foi recebida em seu nome. Codigo: " . htmlspecialchars($codigo);
+            $email_ok = smtp_enviar_com_fallback_cad($morador['email'], $morador['nome_completo'], $subject, $body, $altBody);
+        }
+
+        if ($morador && !empty($morador['telefone'])) {
+            $msgWa = wa_template_notificacao(
+                $morador['nome_completo'],
+                $morador['numero_unidade'],
+                $codigo,
+                $origem,
+                $porteiro,
+                date('d/m/Y H:i'),
+                false
+            );
+            $wa_res = whatsapp_enviar($morador['telefone'], $morador['nome_completo'], $msgWa);
+            $wa_ok = !empty($wa_res['ok']);
+        }
+
+        $pdo->commit();
+        $qs = ['sucesso' => 1];
+        if ($email_ok) $qs['email_ok'] = 1;
+        if ($wa_ok)   $qs['wa_ok'] = 1;
+        header("Location: index.php?" . http_build_query($qs));
         exit;
     } catch (\PDOException $e) {
-        $mensagem = "Erro ao cadastrar (O código da etiqueta pode já estar cadastrado): " . $e->getMessage();
+        $pdo->rollBack();
+        $mensagem = "Erro ao cadastrar (O codigo da etiqueta pode ja estar cadastrado): " . $e->getMessage();
     }
 }
 
-// Buscar moradores para o select
 $moradores = $pdo->query("SELECT id, numero_unidade, nome_completo FROM moradores ORDER BY numero_unidade")->fetchAll();
 ?>
 <!DOCTYPE html>

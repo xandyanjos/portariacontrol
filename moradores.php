@@ -2,10 +2,16 @@
 require_once 'conexao.php';
 require_once 'auth.php';
 
+// Inclui as classes PhpSpreadsheet para que suas constantes e métodos possam ser usados
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\AdvancedValueBinder;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Exception as SpreadsheetReaderException; // Alias para evitar conflito com outras Exceptions
+
 // Inclui o autoload do Composer para carregar a biblioteca PhpSpreadsheet
 if (file_exists('vendor/autoload.php')) {
     require_once 'vendor/autoload.php';
-    \PhpOffice\PhpSpreadsheet\Cell\Cell::setValueBinder(new \PhpOffice\PhpSpreadsheet\Cell\AdvancedValueBinder());
+    Cell::setValueBinder(new AdvancedValueBinder());
 }
 
 $usuario = exigir_login(['administrador', 'portaria']);
@@ -124,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
                 $sucesso = "$contador moradores foram importados com sucesso!";
 
             } catch (Exception $e) {
-                $pdo->rollBack();
+                $pdo->rollBack(); // Certifique-se de que a transação seja revertida em caso de erro
                 // Fornece uma mensagem de erro mais amigável
                 if ($e instanceof \PhpOffice\PhpSpreadsheet\Reader\Exception) {
                     $mensagem = "Ocorreu um erro ao ler o arquivo da planilha. Verifique se o formato está correto e se o arquivo não está corrompido.";

@@ -83,9 +83,15 @@ $alertas = gerar_alertas_abandono($pdo);
             <li><a href="cadastrar_encomenda.php"><i class="bi bi-plus-circle-fill"></i> Nova Encomenda</a></li>
             <li><a href="moradores.php"><i class="bi bi-people-fill"></i> Gestão de Moradores</a></li>
             <li><a href="historico.php"><i class="bi bi-clock-history"></i> Histórico de Retiradas</a></li>
+            <li><a href="retirada_morador.php" target="_blank"><i class="bi bi-box-arrow-up-right text-info"></i> <strong>Retirada Morador (Auto)</strong></a></li>
+            <li><a href="wa_pendentes_view.php"><i class="bi bi-whatsapp text-success"></i> WhatsApp Pendentes</a></li>
+            <li><a href="emails_pendentes_view.php"><i class="bi bi-envelope-paper text-warning"></i> E-mails Pendentes</a></li>
             <?php if ($usuario['perfil'] === 'administrador'): ?>
                 <li><a href="cadastrar_usuario.php"><i class="bi bi-person-plus-fill"></i> Cadastro de Usuários</a></li>
                 <li><a href="listar_usuarios.php"><i class="bi bi-list-ul"></i> Listar Usuários</a></li>
+                <li><a href="teste_whatsapp.php" target="_blank"><i class="bi bi-whatsapp me-1 text-success"></i> Teste WhatsApp</a></li>
+                <li><a href="verifica_env.php" target="_blank"><i class="bi bi-gear-wide-connected text-warning"></i> Verificar Variáveis</a></li>
+                <li><a href="teste_smtp.php" target="_blank"><i class="bi bi-envelope-exclamation-fill text-info"></i> Diagnóstico SMTP</a></li>
             <?php endif; ?>
         </ul>
         <div class="text-muted small text-center pt-3 border-top border-secondary opacity-75">
@@ -104,11 +110,60 @@ $alertas = gerar_alertas_abandono($pdo);
                     <h2 class="fw-bold text-dark mb-1">Painel de Encomendas</h2>
                     <p class="text-muted small mb-0">Gerencie a entrada e saída de pacotes da guarda do condomínio</p>
                 </div>
-                <a href="cadastrar_encomenda.php" class="btn btn-warning text-dark fw-semibold px-4 py-2 shadow-sm d-flex align-items-center gap-2">
-                    <i class="bi bi-plus-lg"></i> Registrar Encomenda
-                </a>
+                <div class="d-flex flex-wrap gap-2 justify-content-end">
+                    <a href="retirada_morador.php" target="_blank" class="btn btn-info text-white fw-semibold px-4 py-2 shadow-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-box-arrow-up-right"></i> Retirada Autoatendimento
+                    </a>
+                    <a href="cadastrar_encomenda.php" class="btn btn-warning text-dark fw-semibold px-4 py-2 shadow-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-plus-lg"></i> Registrar Encomenda
+                    </a>
+                </div>
             </div>
 
+            <?php if (isset($_GET['email_sucesso'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-envelope-check me-2"></i><?= htmlspecialchars($_GET['email_sucesso']) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+            <?php if (isset($_GET['email_erro'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-envelope-x me-2"></i><?= htmlspecialchars($_GET['email_erro']) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+            <?php if (isset($_GET['email_aviso'])): ?>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i><?= htmlspecialchars($_GET['email_aviso']) ?>
+                    <?php if (strpos($_GET['email_aviso'], 'gravado') !== false || strpos($_GET['email_aviso'], 'SMTP indisponivel') !== false): ?>
+                        <a href="emails_pendentes_view.php" class="alert-link fw-bold ms-2">Abrir E-mails Pendentes →</a>
+                    <?php endif; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
+            <!-- Alertas WhatsApp -->
+            <?php if (!empty($_GET['sucesso']) && !empty($_GET['wa_ok'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-whatsapp me-2 fs-5" style="color:#10b981"></i>
+                    <strong>WhatsApp enviado!</strong> Notificação do WhatsApp enviada com sucesso para o morador.
+                    <?php if (!empty($_GET['email_ok'])): ?>
+                        <span class="text-success fw-semibold">E-mail também enviado.</span>
+                    <?php endif; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php elseif (!empty($_GET['sucesso']) && empty($_GET['wa_ok'])): ?>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-whatsapp me-2"></i>
+                    Encomenda cadastrada! Não foi possível enviar o WhatsApp automático (ou morador sem telefone).
+                    A mensagem ficou gravada em
+                    <a href="wa_pendentes_view.php" class="alert-link fw-bold">📱 WhatsApp Pendentes — clique para abrir e enviar manualmente</a>.
+                    <?php if (!empty($_GET['email_ok'])): ?>
+                        <span class="text-success fw-semibold"> (E-mail enviado normalmente).</span>
+                    <?php endif; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
             <!-- Cards de Resumo -->
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
@@ -229,6 +284,9 @@ $alertas = gerar_alertas_abandono($pdo);
                                             <?php if ($enc['status'] == 'Pendente'): ?>
                                                 <a href="dar_baixa.php?id=<?= $enc['id'] ?>" class="btn btn-sm btn-success px-3 shadow-sm d-inline-flex align-items-center gap-1">
                                                     <i class="bi bi-check-lg"></i> Dar Baixa
+                                                </a>
+                                                <a href="resend_email.php?id=<?= $enc['id'] ?>" class="btn btn-sm btn-outline-info px-3 shadow-sm d-inline-flex align-items-center gap-1 ms-2" title="Reenviar e-mail para o morador">
+                                                    <i class="bi bi-envelope"></i> Reenviar E-mail
                                                 </a>
                                             <?php else: ?>
                                                 <span class="text-muted small fst-italic">Retirado</span>
