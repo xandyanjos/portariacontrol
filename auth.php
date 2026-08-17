@@ -27,11 +27,17 @@ function inicializar_usuarios(PDO $pdo): void
     $moradorId = $pdo->query("SELECT id FROM moradores ORDER BY id LIMIT 1")->fetchColumn();
     $moradorId = $moradorId ?: null;
 
+    // Use variáveis de ambiente para as senhas padrão, com fallbacks para desenvolvimento
+    $admin_pass = getenv('DEFAULT_ADMIN_PASSWORD') ?: 'admin123';
+    $portaria_pass = getenv('DEFAULT_PORTARIA_PASSWORD') ?: 'portaria123';
+    $morador_pass = getenv('DEFAULT_MORADOR_PASSWORD') ?: 'morador123';
+    $padrao_pass = getenv('DEFAULT_PADRAO_PASSWORD') ?: 'padrao123';
+
     $usuarios = [
-        ['Administrador', 'admin', 'admin123', 'administrador', null],
-        ['Portaria', 'portaria', 'portaria123', 'portaria', null],
-        ['Morador', 'morador', 'morador123', 'morador', $moradorId],
-        ['Padrão', 'padrao', 'padrao123', 'padrao', null],
+        ['Administrador', 'admin', $admin_pass, 'administrador', null],
+        ['Portaria', 'portaria', $portaria_pass, 'portaria', null],
+        ['Morador', 'morador', $morador_pass, 'morador', $moradorId],
+        ['Padrão', 'padrao', $padrao_pass, 'padrao', null],
     ];
 
     $insert = $pdo->prepare("INSERT INTO usuarios (nome, username, password_hash, perfil, morador_id) VALUES (?, ?, ?, ?, ?)");

@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-warning w-100 fw-semibold">Entrar</button>
             </form>
 
-            <div class="mt-3 small text-muted">
-                <strong>Usuários prontos:</strong> admin / admin123, portaria / portaria123, morador / morador123, padrao / padrao123
-            </div>
+            <!-- <div class="mt-3 small text-muted">
+              <strong>Usuários prontos:</strong> admin / admin123, portaria / portaria123, morador / morador123, padrao / padrao123
+            </div> -->
         </div>
     </div>
 
