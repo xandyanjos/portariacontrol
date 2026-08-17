@@ -57,12 +57,12 @@ body { font-family:'Inter',sans-serif; background:#f0fdf4; color:#0f172a; }
 .sidebar-brand { font-weight:800; color:#fff; padding:18px 16px; border-bottom:1px solid rgba(255,255,255,.08); }
 .wrapper { display:flex; min-height:100vh; }
 .sidebar { width:260px; background:#0f172a; padding:0; flex-shrink:0; }
-.main { flex-grow:1; padding:30px; }
+.main { flex-grow:1; padding:30px; max-width: calc(100vw - 260px); overflow-x: hidden; } /* Ajuste para evitar overflow horizontal */
 .card { border:none; border-radius:16px; box-shadow:0 8px 20px rgba(2,132,199,.06); }
 .file-item { padding:10px 12px; border-radius:10px; cursor:pointer; transition:all .15s; margin-bottom:6px; }
 .file-item:hover { background:#ecfeff; }
 .file-item.active { background:#dcfce7; border-left:4px solid #10b981; }
-.preview { white-space:pre-wrap; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.9rem; background:#0f172a; color:#e2e8f0; padding:22px; border-radius:14px; max-height:420px; overflow:auto; }
+.preview { white-space:pre-wrap; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.9rem; background:#0f172a; color:#e2e8f0; padding:22px; border-radius:14px; max-height:420px; overflow:auto; word-break: break-all; } /* Adicionado word-break para textos longos */
 </style>
 </head>
 <body>
