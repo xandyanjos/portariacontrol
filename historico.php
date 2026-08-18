@@ -8,7 +8,7 @@ $busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
 
 if ($busca !== '') {
     $stmt = $pdo->prepare("
-        SELECT e.*, m.nome_completo as morador_nome, m.numero_unidade, l.data_retirada, l.entregue_por_funcionario, l.retirado_por_morador, l.nome_retirante_avulso, pa.nome_completo as autorizado_nome, pa.parentesco_funcao
+        SELECT e.*, m.nome_completo as morador_nome, m.numero_unidade, l.data_retirada, l.entregue_por_funcionario, l.retirado_por_morador, l.nome_retirante_avulso, l.protocolo_retirada, pa.nome_completo as autorizado_nome, pa.parentesco_funcao
         FROM encomendas e
         JOIN moradores m ON e.morador_id = m.id
         JOIN logs_retirada l ON e.id = l.encomenda_id
@@ -19,7 +19,7 @@ if ($busca !== '') {
     $stmt->execute(["%$busca%", "%$busca%", "%$busca%"]);
 } else {
     $stmt = $pdo->query("
-        SELECT e.*, m.nome_completo as morador_nome, m.numero_unidade, l.data_retirada, l.entregue_por_funcionario, l.retirado_por_morador, l.nome_retirante_avulso, pa.nome_completo as autorizado_nome, pa.parentesco_funcao
+        SELECT e.*, m.nome_completo as morador_nome, m.numero_unidade, l.data_retirada, l.entregue_por_funcionario, l.retirado_por_morador, l.nome_retirante_avulso, l.protocolo_retirada, pa.nome_completo as autorizado_nome, pa.parentesco_funcao
         FROM encomendas e
         JOIN moradores m ON e.morador_id = m.id
         JOIN logs_retirada l ON e.id = l.encomenda_id
@@ -109,6 +109,7 @@ $historico = $stmt->fetchAll();
                                 <th>Retirado Por</th>
                                 <th>Data da Retirada</th>
                                 <th>Porteiro</th>
+                                <th>Protocolo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -132,12 +133,13 @@ $historico = $stmt->fetchAll();
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-muted small"><i class="bi bi-calendar-check me-1"></i><?= date('d/m/Y H:i', strtotime($h['data_retirada'])) ?></td>
-                                        <td><span class="badge bg-light text-dark border px-2 py-1"><?= htmlspecialchars($h['entregue_por_funcionario']) ?></span></td>
+                                        <td><span class="badge bg-light text-dark border px-2 py-1"><?= htmlspecialchars($h['entregue_por_funcionario']) ?></span></td> 
+                                        <td><span class="code-tag"><?= htmlspecialchars($h['protocolo_retirada'] ?: 'N/A') ?></span></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="5" class="text-center py-5">
+                                    <td colspan="6" class="text-center py-5">
                                         <div class="text-muted py-3">
                                             <i class="bi bi-clock-history display-4 d-block mb-2 text-secondary opacity-50"></i>
                                             <p class="mb-0 fw-medium">Nenhum registro de retirada encontrado.</p>

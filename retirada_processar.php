@@ -106,9 +106,9 @@ if ($acao === 'confirmar') {
         $morador_nome = $encomendas[0]['nome_completo'];
         $unidade = $encomendas[0]['numero_unidade'];
 
-        $stmtUpd = $pdo->prepare("UPDATE encomendas SET status = 'Retirado' WHERE id = ?");
-        $stmtLog = $pdo->prepare("INSERT INTO logs_retirada (encomenda_id, retirado_por_id, retirado_por_morador, nome_retirante_avulso, entregue_por_funcionario)
-                                  VALUES (?, NULL, 1, ?, ?)");
+        $stmtUpd = $pdo->prepare("UPDATE encomendas SET status = 'Retirado', data_retirada = NOW() WHERE id = ?");
+        $stmtLog = $pdo->prepare("INSERT INTO logs_retirada (encomenda_id, retirado_por_id, retirado_por_morador, nome_retirante_avulso, entregue_por_funcionario, protocolo_retirada)
+                                  VALUES (?, NULL, 1, ?, ?, ?)");
         
         $comprovante = [
             'morador' => $morador_nome,
@@ -122,7 +122,7 @@ if ($acao === 'confirmar') {
 
         foreach ($encomendas as $e) {
             $stmtUpd->execute([$e['id']]);
-            $stmtLog->execute([$e['id'], "Assinatura: " . $assinatura, $porteiro]);
+            $stmtLog->execute([$e['id'], "Assinatura: " . $assinatura, $porteiro, $comprovante['protocolo']]);
             resolver_alertas_por_encomenda($pdo, $e['id']);
             $comprovante['encomendas'][] = [
                 'id' => $e['id'],
