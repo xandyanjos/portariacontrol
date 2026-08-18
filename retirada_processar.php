@@ -109,7 +109,7 @@ if ($acao === 'confirmar') {
         $stmtUpd = $pdo->prepare("UPDATE encomendas SET status = 'Retirado' WHERE id = ?");
         $stmtLog = $pdo->prepare("INSERT INTO logs_retirada (encomenda_id, retirado_por_id, retirado_por_morador, nome_retirante_avulso, entregue_por_funcionario)
                                   VALUES (?, NULL, 1, ?, ?)");
-
+        
         $comprovante = [
             'morador' => $morador_nome,
             'unidade' => $unidade,

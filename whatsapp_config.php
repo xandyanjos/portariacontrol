@@ -3,14 +3,18 @@ if (!defined('IN_PORTOFOLIO')) define('IN_PORTOFOLIO', true);
 
 function wa_env_value($key, $fallback) {
     $hardcoded = [
-        'WA_PROVIDER'        => 'mock',
-        'WA_HARDCODED_MOCK'  => true,
+        // Exemplo de hardcoded para desenvolvimento, mas deve ser evitado em produção
+        // 'WA_PROVIDER'        => 'mock',
+        // 'WA_HARDCODED_MOCK'  => true,
     ];
-    if (isset($hardcoded[$key]) && $hardcoded[$key] !== '') return $hardcoded[$key];
+    // Prioriza variáveis de ambiente do sistema (getenv)
     $v = getenv($key);
     if ($v !== false && $v !== '') return $v;
+    // Tenta variáveis de ambiente do servidor web ($_SERVER)
     if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') return $_SERVER[$key];
+    // Tenta variáveis de ambiente do PHP ($_ENV)
     if (isset($_ENV[$key]) && $_ENV[$key] !== '') return $_ENV[$key];
+    // Se nada for encontrado, usa o fallback
     return $fallback;
 }
 
@@ -328,8 +332,8 @@ function wa_http($url, $headers, $payload, $method = 'POST', $encode = 'json') {
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // dev mode; em producao deixar true
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // IMPORTANTE: Em produção, DEIXAR TRUE para segurança SSL
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);    // IMPORTANTE: Em produção, DEIXAR 2 para segurança SSL
     $resp = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $err = curl_error($ch);

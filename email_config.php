@@ -2,17 +2,16 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+// Função auxiliar para ler variáveis de ambiente ou usar fallback
 function env_value($key, $fallback) {
-    $hardcoded = [
-        'SMTP_PASSWORD' => 'bzgcxvshxysjvuhc',
-    ];
-    if (isset($hardcoded[$key]) && is_string($hardcoded[$key]) && $hardcoded[$key] !== '') {
-        return $hardcoded[$key];
-    }
+    // Prioriza variáveis de ambiente do sistema (getenv)
     $v = getenv($key);
     if ($v !== false && $v !== '') return $v;
+    // Tenta variáveis de ambiente do servidor web ($_SERVER)
     if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') return $_SERVER[$key];
+    // Tenta variáveis de ambiente do PHP ($_ENV)
     if (isset($_ENV[$key]) && $_ENV[$key] !== '') return $_ENV[$key];
+    // Se nada for encontrado, usa o fallback
     return $fallback;
 }
 
@@ -63,4 +62,8 @@ function email_save_mock($to, $toName, $subject, $body, $altBody = '') {
     @file_put_contents($file, $html);
     return $file;
 }
+
+// Inclui a função de envio de e-mail compartilhada
+// (Movida para um arquivo separado para evitar duplicação)
+require_once __DIR__ . '/email_utils.php';
 ?>

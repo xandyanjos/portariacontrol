@@ -7,58 +7,12 @@ use PHPMailer\PHPMailer\Exception;
 
 if (file_exists('vendor/autoload.php')) {
     require 'vendor/autoload.php';
-    require_once __DIR__ . '/email_config.php';
+    require_once __DIR__ . '/email_config.php'; // Inclui email_config para as constantes
+    require_once __DIR__ . '/email_utils.php';  // Inclui a função de envio compartilhada
     require_once __DIR__ . '/whatsapp_config.php';
 } else {
     error_log("CRITICAL ERROR: O arquivo 'vendor/autoload.php' não foi encontrado. Execute 'composer install'.");
     die("Ocorreu um erro critico no sistema. Por favor, contate o administrador.");
-}
-
-$usuario = exigir_login(['administrador', 'portaria']);
-
-$mensagem = '';
-$sucesso  = '';
-
-$encomenda_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-
-function smtp_enviar_com_fallback($to, $toName, $subject, $body, $altBody) {
-    $tentativas = [
-        ['host' => SMTP_HOST, 'port' => SMTP_PORT, 'secure' => SMTP_SECURE, 'label' => 'STARTTLS :' . SMTP_PORT],
-    ];
-    if (EMAIL_SMTP_FALLBACK_TRY_SSL465 && SMTP_PORT !== 465) {
-        $tentativas[] = ['host' => 'smtp.gmail.com', 'port' => 465, 'secure' => SMTP_SECURE_SSL, 'label' => 'SSL :465'];
-    }
-    $lastErr = '';
-    foreach ($tentativas as $cfg) {
-        try {
-            $mail = new PHPMailer(true);
-            $mail->isSMTP();
-            $mail->Host       = $cfg['host'];
-            $mail->SMTPAuth   = true;
-            $mail->Username   = SMTP_USERNAME;
-            $mail->Password   = SMTP_PASSWORD;
-            $mail->SMTPSecure = $cfg['secure'];
-            $mail->Port       = $cfg['port'];
-            $mail->CharSet    = 'UTF-8';
-            $mail->Timeout    = 12;
-            $mail->setFrom(EMAIL_FROM, EMAIL_FROM_NAME);
-            $mail->addAddress($to, $toName);
-            $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body    = $body;
-            $mail->AltBody = $altBody;
-            $mail->send();
-            return ['ok' => true, 'via' => $cfg['label'], 'file' => null];
-        } catch (Exception $e) {
-            $lastErr = $mail->ErrorInfo;
-            error_log("SMTP [{$cfg['label']}] falhou: " . $lastErr);
-        }
-    }
-    if (EMAIL_USE_MOCK_FALLBACK) {
-        $file = email_save_mock($to, $toName, $subject, $body, $altBody);
-        return ['ok' => true, 'via' => 'MOCK (gravado localmente)', 'file' => $file, 'warn' => 'SMTP indisponivel — email gravado localmente.'];
-    }
-    return ['ok' => false, 'via' => 'nenhuma', 'file' => null, 'error' => $lastErr];
 }
 
 if ($encomenda_id > 0) {
@@ -80,7 +34,7 @@ if ($encomenda_id > 0) {
             $body    = "Ola, " . htmlspecialchars($morador['nome_completo']) . "!<br><br>Este e um lembrete de que uma encomenda foi recebida em seu nome e ja esta disponivel para retirada na portaria.<br><br><strong>Codigo da Etiqueta:</strong> " . htmlspecialchars($encomenda['codigo_etiqueta']) . "<br><strong>Recebida por:</strong> " . htmlspecialchars($encomenda['recebido_por_funcionario']) . "<br><br>Atenciosamente,<br>Equipe da Portaria";
             $altBody = "Ola, " . htmlspecialchars($morador['nome_completo']) . "! Lembrete: Uma nova encomenda foi recebida em seu nome. Codigo: " . htmlspecialchars($encomenda['codigo_etiqueta']);
 
-            $res = smtp_enviar_com_fallback($morador['email'], $morador['nome_completo'], $subject, $body, $altBody);
+            $res = smtp_enviar_com_fallback($morador['email'], $morador['nome_completo'], $subject, $body, $altBody); // Usa a função compartilhada
             if ($res['ok']) {
                 $msg_email_ok[] = "E-mail OK (via {$res['via']})";
                 if (!empty($res['warn'])) $avisos[] = $res['warn'];
