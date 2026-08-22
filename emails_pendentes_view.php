@@ -63,17 +63,11 @@ if ($limpar && $usuario['perfil'] === 'administrador') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background: #f4f6f9; color: #334155; }
-        .card-custom { border: none; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.05), 0 2px 4px -1px rgba(0,0,0,.03); }
-        .email-mock-row { transition: all .15s ease; }
-        .email-mock-row:hover { background-color: #fffbeb; transform: translateX(2px); }
-        iframe.email-preview { border: 1px solid #e2e8f0; border-radius: 10px; width: 100%; min-height: 550px; background: white; }
-    </style>
+    <link href="assets/css/style.css" rel="stylesheet">
 </head>
 <body>
 
-    <nav class="navbar navbar-dark bg-dark shadow-sm py-3">
+    <nav class="navbar navbar-dark bg-dark shadow-sm py-3 navbar-simple">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="index.php">
                 <i class="bi bi-box-seam text-warning fs-4"></i>
@@ -81,14 +75,14 @@ if ($limpar && $usuario['perfil'] === 'administrador') {
             </a>
             <div class="d-flex align-items-center gap-2">
                 <span class="badge bg-warning text-dark"><?= htmlspecialchars(label_perfil($usuario['perfil'])) ?></span>
-                <a href="index.php" class="btn btn-outline-light btn-sm px-3 d-flex align-items-center gap-1">
+                <a href="index.php" class="btn btn-outline-light btn-sm px-3 d-flex align-items-center gap-1 btn-full-mobile">
                     <i class="bi bi-arrow-left"></i> Voltar ao Painel
                 </a>
             </div>
         </div>
     </nav>
 
-    <div class="container my-5" style="max-width: 1200px;">
+    <div class="container my-5">
 
         <?php if (isset($_GET['del'])): ?>
             <div class="alert alert-success d-flex align-items-center gap-2 mb-4" role="alert">
@@ -118,7 +112,7 @@ if ($limpar && $usuario['perfil'] === 'administrador') {
                 </span>
                 <?php if ($usuario['perfil'] === 'administrador' && count($arquivos)): ?>
                     <a href="?limpar_todos=1" onclick="return confirm('Tem certeza que quer APAGAR TODOS os <?= count($arquivos) ?> e-mails? Esta acao e irreversivel.')"
-                       class="btn btn-outline-danger btn-sm px-3">
+                       class="btn btn-outline-danger btn-sm px-3 btn-full-mobile">
                         <i class="bi bi-trash"></i> Limpar Todos
                     </a>
                 <?php endif; ?>
@@ -127,7 +121,7 @@ if ($limpar && $usuario['perfil'] === 'administrador') {
 
         <div class="row g-4">
             <div class="col-lg-5">
-                <div class="card card-custom bg-white p-3">
+                <div class="card card-form bg-white p-3">
                     <?php if (count($arquivos) === 0): ?>
                         <div class="text-center py-5">
                             <i class="bi bi-inbox fs-1 text-success"></i>
@@ -165,15 +159,15 @@ if ($limpar && $usuario['perfil'] === 'administrador') {
             </div>
 
             <div class="col-lg-7">
-                <div class="card card-custom bg-white p-3">
+                <div class="card card-form bg-white p-3">
                     <h5 class="fw-semibold text-dark mb-3 ps-2">
                         <i class="bi bi-eye-fill text-warning"></i> Visualizacao
                         <?php if ($viewPath): ?>
                             <div class="float-end">
-                                <a href="<?= 'emails_pendentes/' . $view ?>" target="_blank" class="btn btn-sm btn-outline-info me-2">
+                                <a href="<?= 'emails_pendentes/' . $view ?>" target="_blank" class="btn btn-sm btn-outline-info me-2 btn-full-mobile">
                                     <i class="bi bi-box-arrow-up-right"></i> Abrir nova aba
                                 </a>
-                                <a href="baixar_email.php?file=<?= urlencode($view) ?>" class="btn btn-sm btn-outline-dark">
+                                <a href="baixar_email.php?file=<?= urlencode($view) ?>" class="btn btn-sm btn-outline-dark btn-full-mobile">
                                     <i class="bi bi-download"></i> Baixar HTML
                                 </a>
                             </div>
@@ -194,7 +188,7 @@ if ($limpar && $usuario['perfil'] === 'administrador') {
             </div>
         </div>
 
-        <div class="card card-custom bg-light mt-4 border border-warning border-opacity-25">
+        <div class="card card-form bg-light mt-4 border border-warning border-opacity-25">
             <div class="card-body">
                 <h5 class="fw-bold text-warning mb-2"><i class="bi bi-lightbulb"></i> Como enviar o e-mail manualmente</h5>
                 <ol class="text-muted mb-0 small" style="line-height: 1.8;">
@@ -208,6 +202,13 @@ if ($limpar && $usuario['perfil'] === 'administrador') {
         </div>
     </div>
 
+    <footer class="global-footer">
+        <div class="container text-center py-4 text-muted small">
+            © <?= date('Y') ?> <strong>PortariaControl</strong> · Desenvolvido por Alexandre Anjos.
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

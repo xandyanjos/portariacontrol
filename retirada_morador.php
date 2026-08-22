@@ -11,18 +11,13 @@ $publica = true;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
     <style>
         :root {
             --cor-principal: #0f766e;
             --cor-principal-esc: #115e59;
             --cor-fundo: #f0fdfa;
             --cor-card: #ffffff;
-        }
-        * { font-family: 'Inter', sans-serif; }
-        body {
-            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 50%, #eff6ff 100%);
-            min-height: 100vh;
-            color: #0f172a;
         }
         .hero-topo {
             background: linear-gradient(135deg, var(--cor-principal) 0%, #0ea5e9 100%);
@@ -167,7 +162,7 @@ $publica = true;
     </div>
 </header>
 
-<main class="container" style="max-width: 780px;">
+<main class="container">
 
     <div class="card-principal">
 
@@ -346,13 +341,13 @@ $publica = true;
             </div>
 
             <div class="d-flex flex-wrap gap-2 justify-content-center">
-                <button type="button" onclick="window.print()" class="btn btn-outline-secondary fw-semibold px-4 py-3 rounded-4">
+                <button type="button" onclick="window.print()" class="btn btn-outline-secondary fw-semibold px-4 py-3 rounded-4 btn-full-mobile">
                     <i class="bi bi-printer me-1"></i> IMPRIMIR COMPROVANTE
                 </button>
-                <button type="button" onclick="window.location.href='retirada_morador.php'" class="btn-principal px-4 py-3">
+                <button type="button" onclick="window.location.href='retirada_morador.php'" class="btn-principal px-4 py-3 btn-full-mobile">
                     <i class="bi bi-arrow-repeat me-1"></i> NOVA RETIRADA
                 </button>
-                <button type="button" onclick="window.location.href='index.php'" class="btn btn-light text-secondary fw-semibold px-4 py-3 rounded-4">
+                <button type="button" onclick="window.location.href='index.php'" class="btn btn-light text-secondary fw-semibold px-4 py-3 rounded-4 btn-full-mobile">
                     <i class="bi bi-house-door me-1"></i> Ir ao Painel
                 </button>
             </div>
@@ -360,12 +355,13 @@ $publica = true;
 
     </div>
 
-    <footer class="text-center py-4 mt-4 text-muted small">
+    <footer class="global-footer text-center py-4 mt-4 text-muted small">
         © <?php echo date('Y'); ?> <strong>PortariaControl</strong> · Desenvolvido por Alexandre Anjos.
     </footer>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/app.js"></script>
 <script>
 let MORADOR_CACHE = null;
 let ENCOMENDAS_CACHE = [];

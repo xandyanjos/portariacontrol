@@ -77,18 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f4f6f9; color: #334155; }
-        .card-custom { border: none; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .info-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
-        .form-control, .form-select { padding: 10px 14px; border-radius: 10px; border: 1px solid #cbd5e1; }
-        .form-control:focus, .form-select:focus { box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.15); border-color: #198754; }
-        .code-tag { background-color: #e2e8f0; color: #0f172a; padding: 3px 8px; border-radius: 6px; font-family: monospace; font-weight: 600; }
-    </style>
+    <link href="assets/css/style.css" rel="stylesheet">
 </head>
 <body>
 
-    <nav class="navbar navbar-dark bg-dark shadow-sm py-3">
+    <nav class="navbar navbar-dark bg-dark shadow-sm py-3 navbar-simple">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="index.php">
                 <i class="bi bi-box-seam text-warning fs-4"></i>
@@ -186,17 +179,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="index.php" class="btn btn-light text-secondary px-4 fw-medium">Cancelar</a>
-                    <button type="submit" class="btn btn-success px-4 fw-semibold shadow-sm">Confirmar Retirada</button>
+                    <a href="index.php" class="btn btn-light text-secondary px-4 fw-medium btn-full-mobile">Cancelar</a>
+                    <button type="submit" class="btn btn-success px-4 fw-semibold shadow-sm btn-full-mobile">Confirmar Retirada</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <footer class="text-center py-4 mt-4 text-muted small">
+    <footer class="global-footer">
         © 2026 Desenvolvido por Alexandre Anjosa. Todos os direitos reservados.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

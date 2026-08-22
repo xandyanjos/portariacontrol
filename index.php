@@ -44,36 +44,31 @@ $alertas = gerar_alertas_abandono($pdo);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f4f6f9; color: #334155; overflow-x: hidden; }
-        
-        /* Layout Sidebar */
-        .sidebar { position: fixed; top: 0; bottom: 0; left: 0; width: 260px; z-index: 100; background-color: #1e293b; padding: 20px; display: flex; flex-direction: column; }
-        .sidebar-brand { font-size: 1.25rem; font-weight: 700; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; margin-bottom: 30px; padding-left: 10px; }
-        .nav-sidebar { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
-        .nav-sidebar li { margin-bottom: 8px; }
-        .nav-sidebar a { display: flex; align-items: center; gap: 12px; color: #94a3b8; text-decoration: none; padding: 12px 16px; border-radius: 10px; font-weight: 500; transition: all 0.2s ease; }
-        .nav-sidebar a:hover, .nav-sidebar a.active { background-color: #334155; color: #f8fafc; }
-        .nav-sidebar a.active { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0f172a; font-weight: 600; }
-        
-        /* Main Content */
-        .main-content { margin-left: 260px; padding: 30px; }
-        @media (max-width: 992px) {
-            .sidebar { width: 100%; height: auto; position: relative; }
-            .main-content { margin-left: 0; padding: 15px; }
-        }
-
         .card-stats { border: none; border-radius: 12px; }
-        .table-custom th { background-color: #1e293b; color: #fff; font-weight: 500; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; padding: 12px 16px; }
-        .table-custom td { padding: 14px 16px; vertical-align: middle; font-size: 0.9rem; }
         .badge-status { padding: 6px 12px; border-radius: 50rem; font-weight: 500; font-size: 0.75rem; }
-        .code-tag { background-color: #f1f5f9; color: #0f172a; padding: 4px 8px; border-radius: 6px; font-family: monospace; font-weight: 600; border: 1px solid #cbd5e1; }
     </style>
 </head>
-<body>
+<body class="com-topbar">
+
+    <!-- Topbar Mobile -->
+    <div class="topbar-mobile">
+        <button type="button" class="btn-hamburguer" id="btnHamburguer" aria-label="Abrir menu">
+            <i class="bi bi-list"></i>
+        </button>
+        <a class="brand-mobile" href="index.php">
+            <i class="bi bi-box-seam text-warning"></i>
+            <span>Portaria<strong class="text-warning">Control</strong></span>
+        </a>
+        <div style="width:40px;"></div>
+    </div>
+
+    <!-- Overlay Mobile -->
+    <div class="overlay-mobile" id="overlayMobile"></div>
 
     <!-- Menu Lateral -->
-    <nav class="sidebar shadow">
+    <nav class="sidebar-wrapper shadow" id="sidebarPrincipal">
         <a class="sidebar-brand" href="index.php">
             <i class="bi bi-box-seam text-warning fs-3"></i>
             <span>Portaria<strong class="text-warning">Control</strong></span>
@@ -83,21 +78,23 @@ $alertas = gerar_alertas_abandono($pdo);
             <li><a href="cadastrar_encomenda.php"><i class="bi bi-plus-circle-fill"></i> Nova Encomenda</a></li>
             <li><a href="moradores.php"><i class="bi bi-people-fill"></i> Gestão de Moradores</a></li>
             <li><a href="historico.php"><i class="bi bi-clock-history"></i> Histórico de Retiradas</a></li>
-            <li><a href="retirada_morador.php" target="_blank"><i class="bi bi-box-arrow-up-right text-info"></i> <strong>Retirada Morador (Auto)</strong></a></li>
+            <li><a href="retirada_morador.php" target="_blank"><i class="bi bi-box-arrow-up-right text-info"></i> <span class="d-none-mobile"><strong>Retirada Morador (Auto)</strong></span><span class="d-none-desktop"><strong>Retirada Auto</strong></span></a></li>
             <li><a href="wa_pendentes_view.php"><i class="bi bi-whatsapp text-success"></i> WhatsApp Pendentes</a></li>
             <li><a href="emails_pendentes_view.php"><i class="bi bi-envelope-paper text-warning"></i> E-mails Pendentes</a></li>
             <?php if ($usuario['perfil'] === 'administrador'): ?>
                 <li><a href="cadastrar_usuario.php"><i class="bi bi-person-plus-fill"></i> Cadastro de Usuários</a></li>
                 <li><a href="listar_usuarios.php"><i class="bi bi-list-ul"></i> Listar Usuários</a></li>
-                <li><a href="teste_whatsapp.php" target="_blank"><i class="bi bi-whatsapp me-1 text-success"></i> Teste WhatsApp</a></li>
+                <li><a href="teste_whatsapp.php" target="_blank"><i class="bi bi-whatsapp text-success"></i> Teste WhatsApp</a></li>
                 <li><a href="verifica_env.php" target="_blank"><i class="bi bi-gear-wide-connected text-warning"></i> Verificar Variáveis</a></li>
                 <li><a href="teste_smtp.php" target="_blank"><i class="bi bi-envelope-exclamation-fill text-info"></i> Diagnóstico SMTP</a></li>
             <?php endif; ?>
         </ul>
-        <div class="text-muted small text-center pt-3 border-top border-secondary opacity-75">
-            <div class="fw-semibold text-light mb-2"><?= htmlspecialchars($usuario['nome']) ?></div>
-            <div class="small text-warning"><?= htmlspecialchars(label_perfil($usuario['perfil'])) ?></div>
-            <a href="logout.php" class="btn btn-outline-light btn-sm mt-3 w-100">Sair</a>
+        <div class="sidebar-footer">
+            <div class="user-name"><?= htmlspecialchars($usuario['nome']) ?></div>
+            <div class="user-role"><?= htmlspecialchars(label_perfil($usuario['perfil'])) ?></div>
+            <a href="logout.php" class="btn btn-outline-light btn-sm mt-3 btn-sair">
+                <i class="bi bi-box-arrow-right me-1"></i> Sair
+            </a>
         </div>
     </nav>
 
@@ -105,16 +102,16 @@ $alertas = gerar_alertas_abandono($pdo);
     <main class="main-content">
         <div class="container-fluid px-0">
             
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="page-header">
                 <div>
-                    <h2 class="fw-bold text-dark mb-1">Painel de Encomendas</h2>
-                    <p class="text-muted small mb-0">Gerencie a entrada e saída de pacotes da guarda do condomínio</p>
+                    <h2 class="mb-1">Painel de Encomendas</h2>
+                    <p class="subtitle">Gerencie a entrada e saída de pacotes da guarda do condomínio</p>
                 </div>
-                <div class="d-flex flex-wrap gap-2 justify-content-end">
-                    <a href="retirada_morador.php" target="_blank" class="btn btn-info text-white fw-semibold px-4 py-2 shadow-sm d-flex align-items-center gap-2">
+                <div class="header-actions">
+                    <a href="retirada_morador.php" target="_blank" class="btn btn-info text-white fw-semibold shadow-sm btn-full-mobile">
                         <i class="bi bi-box-arrow-up-right"></i> Retirada Autoatendimento
                     </a>
-                    <a href="cadastrar_encomenda.php" class="btn btn-warning text-dark fw-semibold px-4 py-2 shadow-sm d-flex align-items-center gap-2">
+                    <a href="cadastrar_encomenda.php" class="btn btn-warning text-dark fw-semibold shadow-sm btn-full-mobile">
                         <i class="bi bi-plus-lg"></i> Registrar Encomenda
                     </a>
                 </div>
@@ -230,25 +227,25 @@ $alertas = gerar_alertas_abandono($pdo);
             </div>
 
             <!-- Barra de Pesquisa -->
-            <div class="card border-0 shadow-sm mb-4 rounded-4 p-2 bg-white">
+            <div class="card card-search">
                 <form method="GET" class="input-group">
-                    <span class="input-group-text bg-transparent border-0 ps-3 text-muted">
+                    <span class="input-group-text">
                         <i class="bi bi-search fs-5"></i>
                     </span>
-                    <input type="text" name="busca" class="form-control border-0 shadow-none fs-6" placeholder="Busque por código de etiqueta, número da unidade ou nome do morador..." value="<?= htmlspecialchars($busca) ?>">
+                    <input type="text" name="busca" class="form-control" placeholder="Busque por código de etiqueta, número da unidade ou nome do morador..." value="<?= htmlspecialchars($busca) ?>">
                     <?php if ($busca !== ''): ?>
                         <a href="index.php" class="btn btn-light border-0 text-danger px-3 d-flex align-items-center">
                             <i class="bi bi-x-lg"></i>
                         </a>
                     <?php endif; ?>
-                    <button class="btn btn-dark px-4 rounded-3 m-1 fw-medium" type="submit">Pesquisar</button>
+                    <button class="btn btn-dark btn-pesquisar fw-medium" type="submit">Pesquisar</button>
                 </form>
             </div>
 
             <!-- Tabela -->
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+            <div class="card card-table">
                 <div class="table-responsive">
-                    <table class="table table-hover table-custom mb-0 align-middle">
+                    <table class="table table-hover table-custom table-responsive-stack mb-0 align-middle">
                         <thead>
                             <tr>
                                 <th>Etiqueta / Rastreio</th>
@@ -312,10 +309,11 @@ $alertas = gerar_alertas_abandono($pdo);
         </div>
     </main>
 
-    <footer class="text-center py-4 mt-4 text-muted small">
+    <footer class="global-footer">
         © 2026 Desenvolvido por Alexandre Anjos. Todos os direitos reservados.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

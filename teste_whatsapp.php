@@ -37,6 +37,7 @@ $moradores_sel = $pdo->query("SELECT id, nome_completo, numero_unidade, telefone
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet">
 <style>
 body { font-family:'Inter',sans-serif; background:#f0fdfa; color:#0f172a; }
 .card { border:none; border-radius:18px; box-shadow:0 10px 30px rgba(2,132,199,.08); }
@@ -48,7 +49,7 @@ code { background:#f8fafc; padding:2px 6px; border-radius:6px; color:#0f766e; }
 </head>
 <body>
 
-<nav class="navbar navbar-dark shadow-sm py-3" style="background:linear-gradient(135deg,#0f766e,#0ea5e9);">
+<nav class="navbar navbar-dark shadow-sm py-3 navbar-simple" style="background:linear-gradient(135deg,#0f766e,#0ea5e9);">
 <div class="container">
 <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="index.php">
 <i class="bi bi-whatsapp text-warning fs-3"></i>
@@ -58,7 +59,7 @@ code { background:#f8fafc; padding:2px 6px; border-radius:6px; color:#0f766e; }
 </div>
 </nav>
 
-<main class="container py-5" style="max-width:1100px;">
+<main class="container py-5">
 
 <h1 class="title mb-4 text-dark"><i class="bi bi-whatsapp me-2 text-success"></i>Configuração e Teste de WhatsApp</h1>
 
@@ -188,7 +189,12 @@ Unid. <?= htmlspecialchars($m['numero_unidade']) ?> - <?= htmlspecialchars($m['n
 
 </main>
 
+<footer class="global-footer">
+    © 2026 Desenvolvido por Alexandre Anjos. Todos os direitos reservados.
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/app.js"></script>
 <script>
 document.getElementById('sel_morador').addEventListener('change', function(){
     const opt = this.options[this.selectedIndex];

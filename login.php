@@ -23,10 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - PortariaControl</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: linear-gradient(135deg, #0f172a, #1e293b); min-height: 100vh; }
-        .card-custom { border: none; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.2); }
-    </style>
+    <link href="assets/css/style.css" rel="stylesheet">
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
@@ -49,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form-label fw-semibold">Senha</label>
                     <input type="password" name="password" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-warning w-100 fw-semibold">Entrar</button>
+                <button type="submit" class="btn btn-warning w-100 fw-semibold btn-full-mobile">Entrar</button>
             </form>
 
             <!-- <div class="mt-3 small text-muted">
@@ -58,8 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <footer class="text-center py-4 mt-4 text-muted small">
+    <footer class="global-footer">
         © 2026 Desenvolvido por Alexandre Anjos. Todos os direitos reservados.
     </footer>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
