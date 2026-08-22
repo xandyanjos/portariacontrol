@@ -1,8 +1,13 @@
 <?php
+date_default_timezone_set('America/Sao_Paulo');
+if (function_exists('ini_set')) {
+    @ini_set('date.timezone', 'America/Sao_Paulo');
+}
+
 $host = 'localhost';
 $db   = 'encomendas';
 $user = 'root';
-$pass = ''; // Insira sua senha do MySQL se houver
+$pass = '';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

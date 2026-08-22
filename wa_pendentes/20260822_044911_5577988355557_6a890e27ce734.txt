@@ -1,0 +1,43 @@
+============================================================================
+  WHATSAPP MOCK (GRAVADO LOCALMENTE) - 22/08/2026 04:49:11
+  Provider tentado: mock
+============================================================================
+
+📱 Para: Paulo Sergio Aguiar do Prado (+ 5577988355557)
+🔗 Link de envio manual via WhatsApp Web:
+   https://wa.me/5577988355557?text=%2A%F0%9F%8F%A2%20Portaria%20Orqu%C3%ADdeas%20Vivendas%2A%0A%0AOl%C3%A1%20Paulo%20Sergio%20Aguiar%20do%20Prado%21%0A%2ALembrete%21%20Sua%20encomenda%20continua%20aguardando%20retirada%20%F0%9F%93%A6%2A%0A%0A%F0%9F%93%8B%20%2ADetalhes%20do%20Pacote%3A%2A%0A%20%20%20%F0%9F%8F%A0%20Unidade%3A%20F08%0A%20%20%20%F0%9F%93%A6%20C%C3%B3digo%3A%207895337781257%0A%20%20%20%F0%9F%9A%9A%20Origem%3A%20Mercado%20Livre%0A%20%20%20%F0%9F%91%A4%20Recebido%20por%3A%20Pedro%0A%20%20%20%E2%8F%B0%20Hor%C3%A1rio%3A%2021%2F08%2F2026%2023%3A44%0A%0A%F0%9F%93%8D%20%2AOnde%20retirar%3A%2A%0APortaria%20principal%2C%20de%20segunda%20a%20domingo%2C%20das%2008%3A00%20%C3%A0s%2022%3A00.%0A%2AAten%C3%A7%C3%A3o%3A%2A%20N%C3%A3o%20esque%C3%A7a%20de%20trazer%20um%20documento%20com%20foto%21%0ASe%20n%C3%A3o%20puder%20retirar%2C%20autorize%20algu%C3%A9m%20pelo%20app.%0A%0A%2AAbra%20o%20autoatendimento%20para%20confirmar%20retirada%3A%2A%0A%F0%9F%94%97%20http%3A%2F%2Flocalhost%2Fencomendas%2Fretirada_morador.php%0A%0ASe%20voc%C3%AA%20j%C3%A1%20retirou%2C%20por%20favor%20desconsidere.%0AAtenciosamente%2C%0AEquipe%20da%20Portaria%20%F0%9F%91%8B
+
+----------------------------------------------------------------------------
+  MENSAGEM:
+----------------------------------------------------------------------------
+*🏢 Portaria Orquídeas Vivendas*
+
+Olá Paulo Sergio Aguiar do Prado!
+*Lembrete! Sua encomenda continua aguardando retirada 📦*
+
+📋 *Detalhes do Pacote:*
+   🏠 Unidade: F08
+   📦 Código: 7895337781257
+   🚚 Origem: Mercado Livre
+   👤 Recebido por: Pedro
+   ⏰ Horário: 21/08/2026 23:44
+
+📍 *Onde retirar:*
+Portaria principal, de segunda a domingo, das 08:00 às 22:00.
+*Atenção:* Não esqueça de trazer um documento com foto!
+Se não puder retirar, autorize alguém pelo app.
+
+*Abra o autoatendimento para confirmar retirada:*
+🔗 http://localhost/encomendas/retirada_morador.php
+
+Se você já retirou, por favor desconsidere.
+Atenciosamente,
+Equipe da Portaria 👋
+
+============================================================================
+  COMO ENVIAR MANUALMENTE:
+  1) Copie o link acima (🔗 wa.me/...) e abra no navegador logado com WhatsApp Web,
+     ou clique no botão abaixo.
+  2) Seu WhatsApp abre com a mensagem PRONTA.
+  3) Basta apertar ENVIAR no seu app do WhatsApp.
+============================================================================

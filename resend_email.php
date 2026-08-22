@@ -5,14 +5,26 @@ require_once 'auth.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+$usuario = exigir_login(['administrador', 'portaria']);
+
 if (file_exists('vendor/autoload.php')) {
     require 'vendor/autoload.php';
-    require_once __DIR__ . '/email_config.php'; // Inclui email_config para as constantes
-    require_once __DIR__ . '/email_utils.php';  // Inclui a função de envio compartilhada
+    require_once __DIR__ . '/email_config.php';
+    require_once __DIR__ . '/email_utils.php';
     require_once __DIR__ . '/whatsapp_config.php';
 } else {
     error_log("CRITICAL ERROR: O arquivo 'vendor/autoload.php' não foi encontrado. Execute 'composer install'.");
     die("Ocorreu um erro critico no sistema. Por favor, contate o administrador.");
+}
+
+$sucesso  = null;
+$mensagem = '';
+
+$encomenda_id = 0;
+if (isset($_GET['id'])) {
+    $encomenda_id = (int) trim($_GET['id']);
+} elseif (isset($_POST['id'])) {
+    $encomenda_id = (int) trim($_POST['id']);
 }
 
 if ($encomenda_id > 0) {
